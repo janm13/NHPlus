@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 public class AllTreatmentController {
     @FXML
@@ -39,7 +40,7 @@ public class AllTreatmentController {
     @FXML
     private Button btnNewTreatment;
     @FXML
-    private Button btnDelete;
+    private Button btnArchive;
 
     private ObservableList<Treatment> tableviewContent =
             FXCollections.observableArrayList();
@@ -73,6 +74,12 @@ public class AllTreatmentController {
         try {
             allTreatments = dao.readAll();
             for (Treatment treatment : allTreatments) {
+                /*if (treatment.getArchiveDate().isBefore(java.time.LocalDate.now().minusYears(10))) {
+                    delete(treatment);
+                } else if (treatment.getArchiveDate().toString().equals("9999-01-01")) {
+                    this.tableviewContent.add(treatment);
+                }*/
+
                 this.tableviewContent.add(treatment);
             }
         } catch (SQLException e) {
@@ -133,15 +140,19 @@ public class AllTreatmentController {
     }
 
     @FXML
-    public void handleDelete(){
+    public void handleArchive(){
         int index = this.tableView.getSelectionModel().getSelectedIndex();
         Treatment t = this.tableviewContent.remove(index);
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
-            dao.deleteById(t.getTid());
+            dao.update(t);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    public void delete(Treatment treatment) throws SQLException {
+        dao.deleteById(treatment.getTid());
     }
 
     @FXML

@@ -55,8 +55,9 @@ public class NewTreatmentController {
         LocalTime end = DateConverter.convertStringToLocalTime(txtEnd.getText());
         String description = txtDescription.getText();
         String remarks = taRemarks.getText();
+        LocalDate archiveDate = LocalDate.of(9999, 1, 1);
         Treatment treatment = new Treatment(patient.getPid(), date,
-                begin, end, description, remarks);
+                begin, end, description, remarks, archiveDate);
         createTreatment(treatment);
         controller.readAllAndShowInTableView();
         stage.close();
