@@ -12,19 +12,21 @@ public class Treatment {
     private LocalTime end;
     private String description;
     private String remarks;
+    private LocalDate archiveDate;
 
     public Treatment(long pid, LocalDate date, LocalTime begin,
-                     LocalTime end, String description, String remarks) {
+                     LocalTime end, String description, String remarks, LocalDate archiveDate) {
         this.pid = pid;
         this.date = date;
         this.begin = begin;
         this.end = end;
         this.description = description;
         this.remarks = remarks;
+        this.archiveDate = archiveDate;
     }
 
     public Treatment(long tid, long pid, LocalDate date, LocalTime begin,
-                     LocalTime end, String description, String remarks) {
+                     LocalTime end, String description, String remarks, LocalDate archiveDate) {
         this.tid = tid;
         this.pid = pid;
         this.date = date;
@@ -32,6 +34,7 @@ public class Treatment {
         this.end = end;
         this.description = description;
         this.remarks = remarks;
+        this.archiveDate = archiveDate;
     }
 
     public long getTid() {
@@ -46,6 +49,10 @@ public class Treatment {
         return date.toString();
     }
 
+    public LocalDate getArchiveDate() {
+        return archiveDate;
+    }
+
     public String getBegin() {
         return begin.toString();
     }
@@ -57,6 +64,11 @@ public class Treatment {
     public void setDate(String s_date) {
         LocalDate date = DateConverter.convertStringToLocalDate(s_date);
         this.date = date;
+    }
+
+    public void setArchiveDate(String s_date) {
+        LocalDate archiveDate = DateConverter.convertStringToLocalDate(s_date);
+        this.archiveDate = archiveDate;
     }
 
     public void setBegin(String begin) {
