@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 public class AllTreatmentController {
     @FXML
@@ -39,7 +40,7 @@ public class AllTreatmentController {
     @FXML
     private Button btnNewTreatment;
     @FXML
-    private Button btnDelete;
+    private Button btnArchive;
 
     private ObservableList<Treatment> tableviewContent =
             FXCollections.observableArrayList();
@@ -50,6 +51,7 @@ public class AllTreatmentController {
     private Main main;
 
     public void initialize() {
+        readAllAndDeleteOldEntries();
         readAllAndShowInTableView();
         comboBox.setItems(myComboBoxData);
         comboBox.getSelectionModel().select(0);
@@ -65,6 +67,23 @@ public class AllTreatmentController {
         createComboBoxData();
     }
 
+    public void readAllAndDeleteOldEntries() {
+        this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
+        List<Treatment> allTreatments;
+        try {
+            allTreatments = dao.readAll();
+            for (Treatment treatment : allTreatments) {
+                if (treatment.getArchiveDate().isBefore(java.time.LocalDate.now().minusYears(10))) {
+                    delete(treatment);
+                } else if (treatment.getArchiveDate().toString().equals("9999-01-01")) {
+                    this.tableviewContent.add(treatment);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void readAllAndShowInTableView() {
         this.tableviewContent.clear();
         comboBox.getSelectionModel().select(0);
@@ -73,7 +92,9 @@ public class AllTreatmentController {
         try {
             allTreatments = dao.readAll();
             for (Treatment treatment : allTreatments) {
-                this.tableviewContent.add(treatment);
+                if (treatment.getArchiveDate() == null) {
+                    this.tableviewContent.add(treatment);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,15 +154,21 @@ public class AllTreatmentController {
     }
 
     @FXML
-    public void handleDelete(){
+    public void handleArchive(){
         int index = this.tableView.getSelectionModel().getSelectedIndex();
-        Treatment t = this.tableviewContent.remove(index);
-        TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
-        try {
-            dao.deleteById(t.getTid());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (this.tableviewContent.get(index).getArchiveDate() == null) {
+            Treatment t = this.tableviewContent.remove(index);
+            TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
+            try {
+                dao.update(t);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+    }
+    
+    public void delete(Treatment treatment) throws SQLException {
+        dao.deleteById(treatment.getTid());
     }
 
     @FXML
