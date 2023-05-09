@@ -73,10 +73,8 @@ public class AllTreatmentController {
         try {
             allTreatments = dao.readAll();
             for (Treatment treatment : allTreatments) {
-                if (treatment.getArchiveDate().isBefore(java.time.LocalDate.now().minusYears(10))) {
+                if (treatment.getArchiveDate() != null && treatment.getArchiveDate().isBefore(java.time.LocalDate.now().minusYears(10))) {
                     delete(treatment);
-                } else if (treatment.getArchiveDate().toString().equals("9999-01-01")) {
-                    this.tableviewContent.add(treatment);
                 }
             }
         } catch (SQLException e) {
