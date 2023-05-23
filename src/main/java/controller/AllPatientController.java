@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import model.Patient;
+import model.Treatment;
 import utils.DateConverter;
 import datastorage.DAOFactory;
 import java.sql.SQLException;

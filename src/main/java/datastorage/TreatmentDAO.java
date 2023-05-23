@@ -21,10 +21,10 @@ public class TreatmentDAO extends DAOimp<Treatment> {
 
     @Override
     protected String getCreateStatementString(Treatment treatment) {
-        return String.format("INSERT INTO treatment (pid, treatment_date, begin, end, description, remarks, archive_date) VALUES " +
-                "(%d, '%s', '%s', '%s', '%s', '%s', '%s')", treatment.getPid(), treatment.getDate(),
+        return String.format("INSERT INTO treatment (pid, treatment_date, begin, end, description, remarks) VALUES " +
+                "(%d, '%s', '%s', '%s', '%s', '%s')", treatment.getPid(), treatment.getDate(),
                 treatment.getBegin(), treatment.getEnd(), treatment.getDescription(),
-                treatment.getRemarks(), treatment.getArchiveDate().toString());
+                treatment.getRemarks());
     }
 
     @Override
@@ -35,9 +35,9 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     @Override
     protected Treatment getInstanceFromResultSet(ResultSet result) throws SQLException {
         LocalDate date = DateConverter.convertStringToLocalDate(result.getString(3));
-        LocalDate archiveDate = DateConverter.convertStringToLocalDate(result.getString(8));
         LocalTime begin = DateConverter.convertStringToLocalTime(result.getString(4));
         LocalTime end = DateConverter.convertStringToLocalTime(result.getString(5));
+        LocalDate archiveDate = DateConverter.convertStringToLocalDate(result.getString(8));
         Treatment m = new Treatment(result.getLong(1), result.getLong(2),
                 date, begin, end, result.getString(6), result.getString(7), archiveDate);
         return m;
@@ -54,9 +54,9 @@ public class TreatmentDAO extends DAOimp<Treatment> {
         Treatment t = null;
         while (result.next()) {
             LocalDate date = DateConverter.convertStringToLocalDate(result.getString(3));
-            LocalDate archiveDate = DateConverter.convertStringToLocalDate(result.getString(8));
             LocalTime begin = DateConverter.convertStringToLocalTime(result.getString(4));
             LocalTime end = DateConverter.convertStringToLocalTime(result.getString(5));
+            LocalDate archiveDate = DateConverter.convertStringToLocalDate(result.getString(8));
             t = new Treatment(result.getLong(1), result.getLong(2),
                     date, begin, end, result.getString(6), result.getString(7), archiveDate);
             list.add(t);
@@ -68,7 +68,7 @@ public class TreatmentDAO extends DAOimp<Treatment> {
     protected String getUpdateStatementString(Treatment treatment) {
         return String.format("UPDATE treatment SET pid = %d, treatment_date = '%s', begin = '%s', end = '%s'," +
                 "description = '%s', remarks = '%s', archive_date = '%s' WHERE tid = %d", treatment.getPid(), treatment.getDate(),
-                treatment.getBegin(), treatment.getEnd(), treatment.getDescription(), treatment.getRemarks(), java.time.LocalDate.now(),
+                treatment.getBegin(), treatment.getEnd(), treatment.getDescription(), treatment.getRemarks(), treatment.getArchiveDate(),
                 treatment.getTid());
     }
 

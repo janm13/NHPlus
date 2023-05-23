@@ -49,8 +49,13 @@ public class Treatment {
         return date.toString();
     }
 
-    public LocalDate getArchiveDate() {
-        return archiveDate;
+    public String getArchiveDate() {
+        if (archiveDate == null) {
+            return null;
+        }
+        else {
+            return archiveDate.toString();
+        }
     }
 
     public String getBegin() {
@@ -104,6 +109,7 @@ public class Treatment {
                 "\nBegin: " + this.begin +
                 "\nEnd: " + this.end +
                 "\nDescription: " + this.description +
-                "\nRemarks: " + this.remarks + "\n";
+                "\nRemarks: " + this.remarks +
+                "\nArchiveDate: " + this.archiveDate + "\n";
     }
 }

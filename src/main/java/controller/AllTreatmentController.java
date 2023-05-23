@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import model.Patient;
 import model.Treatment;
 import datastorage.DAOFactory;
+import utils.DateConverter;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -73,7 +75,8 @@ public class AllTreatmentController {
         try {
             allTreatments = dao.readAll();
             for (Treatment treatment : allTreatments) {
-                if (treatment.getArchiveDate() != null && treatment.getArchiveDate().isBefore(java.time.LocalDate.now().minusYears(10))) {
+                LocalDate tArchiveDate = DateConverter.convertStringToLocalDate(treatment.getArchiveDate());
+                if (tArchiveDate != null && tArchiveDate.isBefore(java.time.LocalDate.now().minusYears(10))) {
                     delete(treatment);
                 }
             }
@@ -155,6 +158,7 @@ public class AllTreatmentController {
     public void handleArchive(){
         int index = this.tableView.getSelectionModel().getSelectedIndex();
         if (this.tableviewContent.get(index).getArchiveDate() == null) {
+            this.tableviewContent.get(index).setArchiveDate(java.time.LocalDate.now().toString());
             Treatment t = this.tableviewContent.remove(index);
             TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
             try {
