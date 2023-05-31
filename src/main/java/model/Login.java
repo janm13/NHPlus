@@ -15,18 +15,21 @@ public class Login {
     private long cid;
     private String username;
     private String passwordHash;
+    private int permissions;
 
-    public Login(long uid, long cid, String username, String passwordHash) {
+    public Login(long uid, long cid, String username, String passwordHash, int permissions) {
         this.uid = uid;
         this.cid = cid;
         this.username = username;
         this.passwordHash = passwordHash;
+        this.permissions = permissions;
     }
 
-    public Login(long cid, String username, String upass) {
+    public Login(long cid, String username, String upass, int permissions) {
         this.cid = cid;
         this.username = username;
         this.passwordHash = generatePasswordHash(upass);
+        this.permissions = permissions;
     }
 
     public long getUid() {
@@ -44,6 +47,10 @@ public class Login {
     public String getPasswordHash() {
         return this.passwordHash;
     }
+
+    public int getPermissions() { return this.permissions; }
+
+     public void setPermissions(int permissions) { this.permissions = permissions; }
 
     private static String generatePasswordHash(String password) {
         int iterations = 10000;

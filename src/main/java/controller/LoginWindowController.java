@@ -38,9 +38,14 @@ public class LoginWindowController {
         LoginDAO dao = DAOFactory.getDAOFactory().createLoginDAO();
         Login user;
         try {
-            if (this.txtUsernameCID.getText() == null) {
+            if (this.txtUsernameCID.getText().equals("") || this.inpPassword.getText().equals("")) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText("Pflichtfelder nicht befüllt!");
+                alert.setContentText("Bitte befühlen sie sowohl 'Benutzername/CID', als auch 'Passwort'!");
+                alert.showAndWait();
                 return;
-            } else if (!this.txtUsernameCID.getText().contains("[a-zA-Z]+") && this.txtUsernameCID.getText().length() <= 4) {
+            } else if (this.txtUsernameCID.getText().matches("[0-9]+") && this.txtUsernameCID.getText().length() <= 4) {
                 user = dao.getReadByCID(parseLong(this.txtUsernameCID.getText()));
             } else {
                 user = dao.getReadByUsername(this.txtUsernameCID.getText());
@@ -48,9 +53,17 @@ public class LoginWindowController {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        if (Login.validatePassword(this.inpPassword.getText(), user.getPasswordHash())) {
-            mainClass.setUser(user);
-            stage.close();
+        if (user != null) {
+            if (Login.validatePassword(this.inpPassword.getText(), user.getPasswordHash())) {
+                mainClass.setUser(user);
+                stage.close();
+            }
         }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Information");
+        alert.setHeaderText("Anmeldung fehlgeschlagen");
+        alert.setContentText("Benutzername/CID und/oder Passwort inkorrekt!");
+        alert.showAndWait();
     }
 }
