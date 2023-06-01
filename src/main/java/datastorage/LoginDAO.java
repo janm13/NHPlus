@@ -24,6 +24,7 @@ public class LoginDAO extends DAOimp<Login>{
     @Override
     protected Login getInstanceFromResultSet(ResultSet result) throws SQLException {
         Login l = null;
+        result.next();
         l = new Login(result.getInt(1), result.getInt(2), result.getString(3), result.getString(4), result.getInt(5));
         return l;
     }
@@ -55,7 +56,7 @@ public class LoginDAO extends DAOimp<Login>{
     public Login getReadByCID(long cid) throws SQLException {
         Statement st = conn.createStatement();
         ResultSet result = st.executeQuery(String.format("SELECT * FROM login WHERE cid = '%d'", cid));
-        if (result.getRow() == 0) {
+        if (!result.isBeforeFirst()) {
             return null;
         }
         return getInstanceFromResultSet(result);
@@ -64,7 +65,7 @@ public class LoginDAO extends DAOimp<Login>{
     public Login getReadByUsername(String username) throws SQLException {
         Statement st = conn.createStatement();
         ResultSet result = st.executeQuery(String.format("SELECT * FROM login WHERE username = '%s'", username));
-        if (result.getRow() == 0) {
+        if (!result.isBeforeFirst()) {
             return null;
         }
         return getInstanceFromResultSet(result);

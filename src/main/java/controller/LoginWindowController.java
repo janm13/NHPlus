@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import model.Login;
 
 import java.sql.SQLException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -57,9 +58,9 @@ public class LoginWindowController {
             if (Login.validatePassword(this.inpPassword.getText(), user.getPasswordHash())) {
                 mainClass.setUser(user);
                 stage.close();
+                return;
             }
         }
-
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
         alert.setHeaderText("Anmeldung fehlgeschlagen");
