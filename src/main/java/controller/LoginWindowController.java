@@ -2,8 +2,12 @@ package controller;
 
 import datastorage.DAOFactory;
 import datastorage.LoginDAO;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import model.Login;
 
@@ -13,6 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.*;
 import javafx.stage.Stage;
 
 import static java.lang.Long.parseLong;
@@ -43,7 +48,7 @@ public class LoginWindowController {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information");
                 alert.setHeaderText("Pflichtfelder nicht befüllt!");
-                alert.setContentText("Bitte befühlen sie sowohl 'Benutzername/CID', als auch 'Passwort'!");
+                alert.setContentText("Bitte befüllen Sie sowohl 'Benutzername/CID', als auch 'Passwort'!");
                 alert.showAndWait();
                 return;
             } else if (this.txtUsernameCID.getText().matches("[0-9]+") && this.txtUsernameCID.getText().length() <= 4) {
@@ -66,5 +71,10 @@ public class LoginWindowController {
         alert.setHeaderText("Anmeldung fehlgeschlagen");
         alert.setContentText("Benutzername/CID und/oder Passwort inkorrekt!");
         alert.showAndWait();
+    }
+
+    @FXML
+    public void onEnter(ActionEvent ae){
+        btnLogin.fire();
     }
 }

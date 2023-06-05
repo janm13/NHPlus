@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NewLoginWindowController">
+    <children>
+        <Label layoutX="241.0" layoutY="35.0" text="NHPlus">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+        <Label layoutX="260.0" layoutY="88.0" text="User anlegen" textAlignment="CENTER" />
+        <TextField fx:id="txtUsername" layoutX="226.0" layoutY="175.0" onAction="#onEnter" promptText="Username" />
+        <PasswordField fx:id="inpPassword" layoutX="226.0" layoutY="214.0" onAction="#onEnter" promptText="Passwort" />
+        <Button fx:id="btnLogin" layoutX="271.0" layoutY="323.0" mnemonicParsing="false" onAction="#handleLogin" text="Anlegen" />
+      <TextField fx:id="txtCID" editable="false" layoutX="225.0" layoutY="136.0" onAction="#onEnter" promptText="Pfleger ID" />
+      <ComboBox fx:id="cbxPermissions" layoutX="226.0" layoutY="263.0" prefWidth="150.0" promptText="Berechtigungen" />
+    </children>
+</AnchorPane>

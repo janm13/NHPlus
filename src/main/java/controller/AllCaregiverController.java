@@ -20,6 +20,7 @@ import utils.DateConverter;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static utils.PermissionChecker.checkPermissions;
@@ -141,7 +142,7 @@ public class AllCaregiverController {
 
     @FXML
     public void handleAdd() {
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 1) || !checkTextfields()) { return; }
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
         String surname = this.txfSurname.getText();
         String firstname = this.txfFirstname.getText();
@@ -184,6 +185,25 @@ public class AllCaregiverController {
     private void delete(Caregiver caregiver) throws SQLException {
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
         this.dao.deleteById(caregiver.getCid());
+    }
+
+    private boolean checkTextfields() {
+        ArrayList<TextField> textFields = new ArrayList<>();
+        textFields.add(txfSurname);
+        textFields.add(txfFirstname);
+        textFields.add(txfPhonenumber);
+
+        for (TextField t : textFields) {
+            if (t.getText().equals("")) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText("Pflichtfelder nicht befüllt!");
+                alert.setContentText("Bitte befüllen Sie alle Felder!");
+                alert.showAndWait();
+                return false;
+            }
+        }
+        return true;
     }
 
     private void clearTextfields() {

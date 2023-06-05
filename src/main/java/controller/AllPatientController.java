@@ -16,6 +16,7 @@ import utils.DateConverter;
 import datastorage.DAOFactory;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static utils.PermissionChecker.checkPermissions;
@@ -54,8 +55,6 @@ public class AllPatientController {
     TextField txtCarelevel;
     @FXML
     TextField txtRoom;
-    @FXML
-    private TextField txtAssets;
 
     private ObservableList<Patient> tableviewContent = FXCollections.observableArrayList();
     private PatientDAO dao;
@@ -233,7 +232,7 @@ public class AllPatientController {
      */
     @FXML
     public void handleAdd() {
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 1) || !checkTextfields()) { return; }
         this.dao = DAOFactory.getDAOFactory().createPatientDAO();
         String surname = this.txtSurname.getText();
         String firstname = this.txtFirstname.getText();
@@ -249,6 +248,27 @@ public class AllPatientController {
         }
         readAllAndShowInTableView();
         clearTextfields();
+    }
+
+    private boolean checkTextfields() {
+        ArrayList<TextField> textFields = new ArrayList<>();
+        textFields.add(txtSurname);
+        textFields.add(txtFirstname);
+        textFields.add(txtBirthday);
+        textFields.add(txtRoom);
+        textFields.add(txtCarelevel);
+
+        for (TextField t : textFields) {
+            if (t.getText().equals("")) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText("Pflichtfelder nicht befüllt!");
+                alert.setContentText("Bitte befüllen Sie alle Felder!");
+                alert.showAndWait();
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
