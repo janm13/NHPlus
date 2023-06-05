@@ -8,11 +8,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.Caregiver;
+import model.Login;
 import model.Patient;
 import model.Treatment;
 import utils.DateConverter;
 import java.sql.SQLException;
 import java.time.LocalDate;
+
+import static utils.PermissionChecker.checkPermissions;
 
 public class TreatmentController {
     @FXML
@@ -43,8 +46,10 @@ public class TreatmentController {
     private Patient patient;
     private Caregiver caregiver;
     private Treatment treatment;
+    private Login user;
 
-    public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment) {
+    public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment, Login user) {
+        this.user = user;
         this.stage = stage;
         this.controller= controller;
         PatientDAO pDao = DAOFactory.getDAOFactory().createPatientDAO();
@@ -74,6 +79,7 @@ public class TreatmentController {
 
     @FXML
     public void handleChange(){
+        if (!checkPermissions(this.user, 1)) { return; }
         this.treatment.setDate(this.datepicker.getValue().toString());
         this.treatment.setBegin(txtBegin.getText());
         this.treatment.setEnd(txtEnd.getText());

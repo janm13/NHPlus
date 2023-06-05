@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.Login;
 import model.Patient;
 import model.Treatment;
 import datastorage.DAOFactory;
@@ -21,6 +22,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
+
+import static utils.PermissionChecker.checkPermissions;
 
 public class AllTreatmentController {
     @FXML
@@ -50,14 +53,14 @@ public class AllTreatmentController {
     private ObservableList<String> myComboBoxData =
             FXCollections.observableArrayList();
     private ArrayList<Patient> patientList;
-    private Main main;
+    private Login user;
 
-    public void initialize() {
+    public void initialize(Login user) {
+        this.user = user;
         readAllAndDeleteOldEntries();
         readAllAndShowInTableView();
         comboBox.setItems(myComboBoxData);
         comboBox.getSelectionModel().select(0);
-        this.main = main;
 
         this.colID.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("tid"));
         this.colPid.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("pid"));
@@ -156,6 +159,7 @@ public class AllTreatmentController {
 
     @FXML
     public void handleArchive(){
+        if (!checkPermissions(this.user, 1)) { return; }
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         int index = this.tableView.getSelectionModel().getSelectedIndex();
         if (this.tableviewContent.get(index).getArchiveDate() == null) {
@@ -176,6 +180,7 @@ public class AllTreatmentController {
 
     @FXML
     public void handleNewTreatment() {
+        if (!checkPermissions(this.user, 1)) { return; }
         try{
             String p = this.comboBox.getSelectionModel().getSelectedItem();
             Patient patient = searchInList(p);
@@ -231,7 +236,7 @@ public class AllTreatmentController {
             Stage stage = new Stage();
             TreatmentController controller = loader.getController();
 
-            controller.initializeController(this, stage, treatment);
+            controller.initializeController(this, stage, treatment, this.user);
 
             stage.setScene(scene);
             stage.setResizable(false);

@@ -14,12 +14,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import model.Caregiver;
 import datastorage.CaregiverDAO;
+import model.Login;
 import model.Treatment;
 import utils.DateConverter;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+
+import static utils.PermissionChecker.checkPermissions;
 
 public class AllCaregiverController {
 
@@ -47,8 +50,10 @@ public class AllCaregiverController {
 
     private ObservableList<Caregiver> tableviewContent = FXCollections.observableArrayList();
     private CaregiverDAO dao;
+    private Login user;
 
-    public void initialize() {
+    public void initialize(Login user) {
+        this.user = user;
         readAllAndDeleteOldEntries();
         readAllAndShowInTableView();
 
@@ -71,18 +76,21 @@ public class AllCaregiverController {
 
     @FXML
     public void handleOnEditFirstName(TableColumn.CellEditEvent<Caregiver, String> event) {
+        if (!checkPermissions(this.user, 1)) { return; }
         event.getRowValue().setFirstName(event.getNewValue());
         doUpdate(event);
     }
 
     @FXML
     public void handleOnEditSurname(TableColumn.CellEditEvent<Caregiver, String> event) {
+        if (!checkPermissions(this.user, 1)) { return; }
         event.getRowValue().setSurname(event.getNewValue());
         doUpdate(event);
     }
 
     @FXML
     public void handleOnEditPhoneNumber(TableColumn.CellEditEvent<Caregiver, String> event) {
+        if (!checkPermissions(this.user, 1)) { return; }
         event.getRowValue().setPhoneNumber(event.getNewValue());
         doUpdate(event);
     }
@@ -133,6 +141,7 @@ public class AllCaregiverController {
 
     @FXML
     public void handleAdd() {
+        if (!checkPermissions(this.user, 1)) { return; }
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
         String surname = this.txfSurname.getText();
         String firstname = this.txfFirstname.getText();
@@ -149,6 +158,7 @@ public class AllCaregiverController {
 
     @FXML
     public void handleDelete() {
+        if (!checkPermissions(this.user, 1)) { return; }
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
         TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
         List<Treatment> caregiverTreatments;

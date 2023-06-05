@@ -54,8 +54,11 @@ public class Main extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/MainWindowView.fxml"));
             BorderPane pane = loader.load();
-
             Scene scene = new Scene(pane);
+
+            MainWindowController controller = loader.getController();
+            controller.initialize(this.user);
+
             this.primaryStage.setTitle("NHPlus");
             this.primaryStage.setScene(scene);
             this.primaryStage.setResizable(false);
