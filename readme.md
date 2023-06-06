@@ -51,6 +51,37 @@ Wird das Open JDK verwendet, werden JavaFX-Abhängigkeiten nicht importiert. Die
 - Passwort: SA
 - Bitte nicht in die Datenbank schauen, während die Applikation läuft. Das sorgt leider für einen Lock, der erst wieder verschwindet, wenn IntelliJ neu gestartet wird!
 
+## Testfälle
+
+### Pflegermodul
+| Testfall | Beschreibung                        |                       Erfolgreich                        |
+|----------|-------------------------------------|:--------------------------------------------------------:|
+| TF_1     | Alle Pflegekräfte anzeigen          | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+| TF_2     | Neue Pflegekraft hinzufügen         | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+| TF_3     | Pflegekraft-Daten ändern            | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+| TF_4     | Pflegekraft-Daten löschen (sperren) | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+
+### Speicherfrist
+| Testfall | Beschreibung                |                       Erfolgreich                        |
+|----------|-----------------------------|:--------------------------------------------------------:|
+| TF_1     | Patient archivieren         | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+| TF_2     | Datenbank enthält Datensatz | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+| TF_3     | Automatische Löschung       | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+
+### Login
+| Testfall | Beschreibung                                        |                       Erfolgreich                        |
+|----------|-----------------------------------------------------|:--------------------------------------------------------:|
+| TF_1     | Login mit falschen Benutzerdaten                    | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+| TF_2     | Login mit richtigen Benutzerdaten                   | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+| TF_3     | Benutzerrollen Test                                 | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+| TF_4     | Löschen und Bearbeitung von Daten als Administrator | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+
+### Vermögensstand entfernen
+| Testfall | Beschreibung         |                       Erfolgreich                        |
+|----------|----------------------|:--------------------------------------------------------:|
+| TF_1     | Alle Views aufrufen  | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+| TF_2     | Datenbank überprüfen | ![#00ee22](https://placehold.co/15x15/00ee22/00ee22.png) |
+
 ## Benutzername und Passwort für das Login
 
 Admin (**Alle Berechtigungen**):
