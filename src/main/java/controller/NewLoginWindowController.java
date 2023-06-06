@@ -89,6 +89,13 @@ public class NewLoginWindowController {
             alert.setContentText("Bitte befüllen Sie sowohl 'CID', 'Benutzername', 'Passwort' und 'Berechtigungen'!");
             alert.showAndWait();
             return false;
+        } else if (this.inpPassword.getText().length() < 5) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information");
+            alert.setHeaderText("Sicherheitshinweis!");
+            alert.setContentText("Das Passwort muss mindestens 5 Zeichen lang sein!");
+            alert.showAndWait();
+            return false;
         }
         return true;
     }
