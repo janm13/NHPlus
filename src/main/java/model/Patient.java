@@ -23,8 +23,8 @@ public class Patient extends Person {
      * @param careLevel
      * @param roomnumber
      */
-    public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
-        super(firstName, surname);
+    public Patient(String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, LocalDate archiveDate) {
+        super(firstName, surname, archiveDate);
         this.dateOfBirth = dateOfBirth;
         this.careLevel = careLevel;
         this.roomnumber = roomnumber;
@@ -39,8 +39,8 @@ public class Patient extends Person {
      * @param careLevel
      * @param roomnumber
      */
-    public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber) {
-        super(firstName, surname);
+    public Patient(long pid, String firstName, String surname, LocalDate dateOfBirth, String careLevel, String roomnumber, LocalDate archiveDate) {
+        super(firstName, surname, archiveDate);
         this.pid = pid;
         this.dateOfBirth = dateOfBirth;
         this.careLevel = careLevel;
@@ -128,6 +128,7 @@ public class Patient extends Person {
                 "\nBirthday: " + this.dateOfBirth +
                 "\nCarelevel: " + this.careLevel +
                 "\nRoomnumber: " + this.roomnumber +
+                "\nArchiveDate: " + this.getArchiveDate() +
                 "\n";
     }
 }

@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import model.Caregiver;
 import model.Patient;
 import model.Treatment;
 import utils.DateConverter;
@@ -60,6 +61,7 @@ public class AllPatientController {
      * Initializes the corresponding fields. Is called as soon as the corresponding FXML file is to be displayed.
      */
     public void initialize() {
+        readAllAndDeleteOldEntries();
         readAllAndShowInTableView();
 
         this.colID.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("pid"));
@@ -140,8 +142,25 @@ public class AllPatientController {
      * @param t row to be updated by the user (includes the patient)
      */
     private void doUpdate(TableColumn.CellEditEvent<Patient, String> t) {
+        this.dao = DAOFactory.getDAOFactory().createPatientDAO();
         try {
-            dao.update(t.getRowValue());
+            this.dao.update(t.getRowValue());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readAllAndDeleteOldEntries() {
+        this.dao = DAOFactory.getDAOFactory().createPatientDAO();
+        List<Patient> allPatients;
+        try {
+            allPatients = this.dao.readAll();
+            for (Patient patient : allPatients) {
+                LocalDate pArchiveDate = DateConverter.convertStringToLocalDate(patient.getArchiveDate());
+                if (pArchiveDate != null && pArchiveDate.isBefore(java.time.LocalDate.now().minusYears(10))) {
+                    delete(patient);
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -155,9 +174,11 @@ public class AllPatientController {
         this.dao = DAOFactory.getDAOFactory().createPatientDAO();
         List<Patient> allPatients;
         try {
-            allPatients = dao.readAll();
+            allPatients = this.dao.readAll();
             for (Patient p : allPatients) {
-                this.tableviewContent.add(p);
+                if (p.getArchiveDate() == null) {
+                    this.tableviewContent.add(p);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -169,15 +190,31 @@ public class AllPatientController {
      */
     @FXML
     public void handleDeleteRow() {
+        this.dao = DAOFactory.getDAOFactory().createPatientDAO();
+        int index = this.tableView.getSelectionModel().getSelectedIndex();
+        Patient selectedItem = this.tableviewContent.remove(index);
         TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
-        Patient selectedItem = this.tableView.getSelectionModel().getSelectedItem();
+        selectedItem.setArchiveDate(java.time.LocalDate.now().toString());
+        List<Treatment> archiveTreatments;
         try {
-            tDao.deleteByPid(selectedItem.getPid());
-            dao.deleteById(selectedItem.getPid());
-            this.tableView.getItems().remove(selectedItem);
+            archiveTreatments = tDao.readTreatmentsByPid(selectedItem.getPid());
+            for (Treatment t : archiveTreatments) {
+                if (t.getArchiveDate() == null) {
+                    t.setArchiveDate(selectedItem.getArchiveDate());
+                    tDao.update(t);
+                }
+            }
+            this.dao.update(selectedItem);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void delete(Patient patient) throws SQLException {
+        this.dao = DAOFactory.getDAOFactory().createPatientDAO();
+        TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
+        tDao.deleteByPid(patient.getPid());
+        this.dao.deleteById(patient.getPid());
     }
 
     /**
@@ -185,6 +222,7 @@ public class AllPatientController {
      */
     @FXML
     public void handleAdd() {
+        this.dao = DAOFactory.getDAOFactory().createPatientDAO();
         String surname = this.txtSurname.getText();
         String firstname = this.txtFirstname.getText();
         String birthday = this.txtBirthday.getText();
@@ -192,8 +230,8 @@ public class AllPatientController {
         String carelevel = this.txtCarelevel.getText();
         String room = this.txtRoom.getText();
         try {
-            Patient p = new Patient(firstname, surname, date, carelevel, room);
-            dao.create(p);
+            Patient p = new Patient(firstname, surname, date, carelevel, room, null);
+            this.dao.create(p);
         } catch (SQLException e) {
             e.printStackTrace();
         }

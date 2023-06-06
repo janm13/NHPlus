@@ -73,7 +73,7 @@ public class AllTreatmentController {
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         List<Treatment> allTreatments;
         try {
-            allTreatments = dao.readAll();
+            allTreatments = this.dao.readAll();
             for (Treatment treatment : allTreatments) {
                 LocalDate tArchiveDate = DateConverter.convertStringToLocalDate(treatment.getArchiveDate());
                 if (tArchiveDate != null && tArchiveDate.isBefore(java.time.LocalDate.now().minusYears(10))) {
@@ -91,7 +91,7 @@ public class AllTreatmentController {
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         List<Treatment> allTreatments;
         try {
-            allTreatments = dao.readAll();
+            allTreatments = this.dao.readAll();
             for (Treatment treatment : allTreatments) {
                 if (treatment.getArchiveDate() == null) {
                     this.tableviewContent.add(treatment);
@@ -135,7 +135,7 @@ public class AllTreatmentController {
         Patient patient = searchInList(p);
         if(patient !=null){
             try {
-                allTreatments = dao.readTreatmentsByPid(patient.getPid());
+                allTreatments = this.dao.readTreatmentsByPid(patient.getPid());
                 for (Treatment treatment : allTreatments) {
                     this.tableviewContent.add(treatment);
                 }
@@ -156,13 +156,13 @@ public class AllTreatmentController {
 
     @FXML
     public void handleArchive(){
+        this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         int index = this.tableView.getSelectionModel().getSelectedIndex();
         if (this.tableviewContent.get(index).getArchiveDate() == null) {
             this.tableviewContent.get(index).setArchiveDate(java.time.LocalDate.now().toString());
             Treatment t = this.tableviewContent.remove(index);
-            TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
             try {
-                dao.update(t);
+                this.dao.update(t);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -170,7 +170,8 @@ public class AllTreatmentController {
     }
     
     public void delete(Treatment treatment) throws SQLException {
-        dao.deleteById(treatment.getTid());
+        this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
+        this.dao.deleteById(treatment.getTid());
     }
 
     @FXML

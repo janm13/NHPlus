@@ -42,7 +42,7 @@
                <children>
                   <Button fx:id="btnNewTreament" mnemonicParsing="false" onAction="#handleNewTreatment" prefWidth="200.0" text="neue Behandlung anlegen" GridPane.columnIndex="1" />
                   <ComboBox fx:id="comboBox" minWidth="160.0" onAction="#handleComboBox" prefWidth="200.0" />
-                  <Button fx:id="btnArchive" mnemonicParsing="false" onAction="#handleArchive" prefWidth="200.0" text="Archivieren" GridPane.columnIndex="2" />
+                  <Button fx:id="btnArchive" mnemonicParsing="false" onAction="#handleArchive" prefWidth="200.0" text="Löschen" GridPane.columnIndex="2" />
                </children>
                <padding>
                   <Insets right="10.0" />
