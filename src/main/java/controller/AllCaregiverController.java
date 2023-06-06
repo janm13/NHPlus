@@ -31,10 +31,8 @@ import java.util.List;
 
 import static utils.PermissionChecker.checkPermissions;
 
-public class AllCaregiverController {
-
-    @FXML
-    private TableView<Caregiver> tableView;
+public class AllCaregiverController {@FXML
+private TableView<Caregiver> tableView;
     @FXML
     private TableColumn<Caregiver, Integer> colID;
     @FXML
@@ -43,26 +41,25 @@ public class AllCaregiverController {
     private TableColumn<Caregiver, String> colSurname;
     @FXML
     private TableColumn<Caregiver, String> colPhoneNumber;
-
     @FXML
-    Button btnDelete;
+    private Button btnDelete;
     @FXML
-    Button btnAdd;
+    private Button btnAdd;
     @FXML
-    TextField txfSurname;
+    private TextField txfSurname;
     @FXML
-    TextField txfFirstname;
+    private TextField txfFirstname;
     @FXML
-    TextField txfPhonenumber;
+    private TextField txfPhonenumber;
 
     private ObservableList<Caregiver> tableviewContent = FXCollections.observableArrayList();
     private CaregiverDAO dao;
     private Login user;
 
     /**
-     * initialize the tableview and delete all old entries
+     * Initializes the AllCaregiverController with the given user.
      *
-     * @param user
+     * @param user The currently logged-in user.
      */
     public void initialize(Login user) {
         this.user = user;
@@ -71,9 +68,7 @@ public class AllCaregiverController {
 
         this.colID.setCellValueFactory(new PropertyValueFactory<Caregiver, Integer>("cid"));
 
-        //CellValuefactory zum Anzeigen der Daten in der TableView
         this.colFirstName.setCellValueFactory(new PropertyValueFactory<Caregiver, String>("firstName"));
-        //CellFactory zum Schreiben innerhalb der Tabelle
         this.colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
 
         this.colSurname.setCellValueFactory(new PropertyValueFactory<Caregiver, String>("surname"));
@@ -82,50 +77,55 @@ public class AllCaregiverController {
         this.colPhoneNumber.setCellValueFactory(new PropertyValueFactory<Caregiver, String>("phoneNumber"));
         this.colPhoneNumber.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        //Anzeigen der Daten
         this.tableView.setItems(this.tableviewContent);
     }
 
     /**
-     * handle editing of first name
+     * Handles the event of editing the first name of a caregiver in the table.
      *
-     * @param event
+     * @param event The cell edit event.
      */
     @FXML
     public void handleOnEditFirstName(TableColumn.CellEditEvent<Caregiver, String> event) {
-        if (!checkPermissions(this.user, 0)) { return; }
+        if (!checkPermissions(this.user, 0)) {
+            return;
+        }
         event.getRowValue().setFirstName(event.getNewValue());
         doUpdate(event);
     }
 
     /**
-     * handle editing of surname
+     * Handles the event of editing the surname of a caregiver in the table.
      *
-     * @param event
+     * @param event The cell edit event.
      */
     @FXML
     public void handleOnEditSurname(TableColumn.CellEditEvent<Caregiver, String> event) {
-        if (!checkPermissions(this.user, 0)) { return; }
+        if (!checkPermissions(this.user, 0)) {
+            return;
+        }
         event.getRowValue().setSurname(event.getNewValue());
         doUpdate(event);
     }
 
     /**
-     * handle editing of phone number
+     * Handles the event of editing the phone number of a caregiver in the table.
      *
-     * @param event
+     * @param event The cell edit event.
      */
     @FXML
     public void handleOnEditPhoneNumber(TableColumn.CellEditEvent<Caregiver, String> event) {
-        if (!checkPermissions(this.user, 0)) { return; }
+        if (!checkPermissions(this.user, 0)) {
+            return;
+        }
         event.getRowValue().setPhoneNumber(event.getNewValue());
         doUpdate(event);
     }
 
     /**
-     * handle update of a caregiver
+     * Performs the update of a caregiver in the database.
      *
-     * @param t
+     * @param t The cell edit event.
      */
     private void doUpdate(TableColumn.CellEditEvent<Caregiver, String> t) {
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
@@ -137,7 +137,7 @@ public class AllCaregiverController {
     }
 
     /**
-     * handle deleting of all old caregivers
+     * Reads all caregivers and deletes the old entries from the database.
      */
     public void readAllAndDeleteOldEntries() {
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
@@ -156,7 +156,7 @@ public class AllCaregiverController {
     }
 
     /**
-     * calls readAll in {@Link CaregiverDAO} and shows caregivers in the table
+     * Reads all caregivers from the database and shows them in the table view.
      */
     private void readAllAndShowInTableView() {
         this.tableviewContent.clear();
@@ -175,11 +175,13 @@ public class AllCaregiverController {
     }
 
     /**
-     * handle adding of a new caregiver
+     * Handles the event of adding a new caregiver.
      */
     @FXML
     public void handleAdd() {
-        if (!checkPermissions(this.user, 0) || !checkTextfields()) { return; }
+        if (!checkPermissions(this.user, 0) || !checkTextfields()) {
+            return;
+        }
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
         String surname = this.txfSurname.getText();
         String firstname = this.txfFirstname.getText();
@@ -204,27 +206,27 @@ public class AllCaregiverController {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/NewLoginWindowView.fxml"));
             AnchorPane pane = loader.load();
             Scene scene = new Scene(pane);
-            //da die primaryStage noch im Hintergrund bleiben soll
             Stage stage = new Stage();
 
             NewLoginWindowController controller = loader.getController();
-            controller.initialize(caregiverList.get(caregiverList.size()-1).getCid(), stage);
+            controller.initialize(caregiverList.get(caregiverList.size() - 1).getCid(), stage);
 
             stage.setScene(scene);
             stage.setResizable(false);
             stage.showAndWait();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
     /**
-     * handle archiving or deleting of a caregiver
+     * Handles the event of archiving or deleting a caregiver.
      */
     @FXML
     public void handleDelete() {
-        if (!checkPermissions(this.user, 0)) { return; }
+        if (!checkPermissions(this.user, 0)) {
+            return;
+        }
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
         TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
         List<Treatment> caregiverTreatments;
@@ -248,9 +250,10 @@ public class AllCaregiverController {
     }
 
     /**
-     * handle deleting of a caregiver
+     * Deletes a caregiver from the database.
      *
-     * @param caregiver
+     * @param caregiver The caregiver to be deleted.
+     * @throws SQLException If an SQL exception occurs.
      */
     private void delete(Caregiver caregiver) throws SQLException {
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
@@ -260,9 +263,9 @@ public class AllCaregiverController {
     }
 
     /**
-     * check if all textfields are filled
+     * Checks if all text fields are filled.
      *
-     * @return
+     * @return True if all text fields are filled, false otherwise.
      */
     private boolean checkTextfields() {
         ArrayList<TextField> textFields = new ArrayList<>();
@@ -271,11 +274,11 @@ public class AllCaregiverController {
         textFields.add(txfPhonenumber);
 
         for (TextField t : textFields) {
-            if (t.getText().equals("")) {
+            if (t.getText().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information");
                 alert.setHeaderText("Pflichtfelder nicht befüllt!");
-                alert.setContentText("Bitte befüllen Sie alle Felder!");
+                alert.setContentText("Bitte füllen Sie alle Felder aus!");
                 alert.showAndWait();
                 return false;
             }
@@ -284,7 +287,7 @@ public class AllCaregiverController {
     }
 
     /**
-     * clear all textfields
+     * Clears all text fields.
      */
     private void clearTextfields() {
         this.txfFirstname.clear();

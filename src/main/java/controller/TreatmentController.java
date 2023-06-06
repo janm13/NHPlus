@@ -12,11 +12,15 @@ import model.Login;
 import model.Patient;
 import model.Treatment;
 import utils.DateConverter;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 
 import static utils.PermissionChecker.checkPermissions;
 
+/**
+ * The controller class for the treatment window.
+ */
 public class TreatmentController {
     @FXML
     private Label lblPatientName;
@@ -48,10 +52,18 @@ public class TreatmentController {
     private Treatment treatment;
     private Login user;
 
+    /**
+     * Initializes the controller with the specified parameters.
+     *
+     * @param controller The AllTreatmentController instance.
+     * @param stage      The JavaFX stage.
+     * @param treatment  The treatment associated with the window.
+     * @param user       The logged-in user.
+     */
     public void initializeController(AllTreatmentController controller, Stage stage, Treatment treatment, Login user) {
         this.user = user;
         this.stage = stage;
-        this.controller= controller;
+        this.controller = controller;
         PatientDAO pDao = DAOFactory.getDAOFactory().createPatientDAO();
         CaregiverDAO cDao = DAOFactory.getDAOFactory().createCaregiverDAO();
         try {
@@ -64,10 +76,10 @@ public class TreatmentController {
         }
     }
 
-    private void showData(){
-        this.lblPatientName.setText(patient.getSurname()+", "+patient.getFirstName());
+    private void showData() {
+        this.lblPatientName.setText(patient.getSurname() + ", " + patient.getFirstName());
         this.lblCarelevel.setText(patient.getCareLevel());
-        this.lblCaregiverName.setText(caregiver.getSurname()+", "+caregiver.getFirstName());
+        this.lblCaregiverName.setText(caregiver.getSurname() + ", " + caregiver.getFirstName());
         this.lblPhoneNumber.setText(caregiver.getPhoneNumber());
         LocalDate date = DateConverter.convertStringToLocalDate(treatment.getDate());
         this.datepicker.setValue(date);
@@ -77,9 +89,14 @@ public class TreatmentController {
         this.taRemarks.setText(this.treatment.getRemarks());
     }
 
+    /**
+     * Handles the action when the "Change" button is clicked.
+     */
     @FXML
-    public void handleChange(){
-        if (!checkPermissions(this.user, 1)) { return; }
+    public void handleChange() {
+        if (!checkPermissions(this.user, 1)) {
+            return;
+        }
         this.treatment.setDate(this.datepicker.getValue().toString());
         this.treatment.setBegin(txtBegin.getText());
         this.treatment.setEnd(txtEnd.getText());
@@ -90,7 +107,7 @@ public class TreatmentController {
         stage.close();
     }
 
-    private void doUpdate(){
+    private void doUpdate() {
         TreatmentDAO dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         try {
             dao.update(treatment);
@@ -99,8 +116,11 @@ public class TreatmentController {
         }
     }
 
+    /**
+     * Handles the action when the "Cancel" button is clicked.
+     */
     @FXML
-    public void handleCancel(){
+    public void handleCancel() {
         stage.close();
     }
 }

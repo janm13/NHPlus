@@ -22,6 +22,10 @@ import javafx.stage.Stage;
 
 import static java.lang.Long.parseLong;
 
+
+/**
+ * The controller class for the login window.
+ */
 public class LoginWindowController {
 
     @FXML
@@ -34,13 +38,21 @@ public class LoginWindowController {
     private Main mainClass;
     private Stage stage;
 
+    /**
+     * Initializes the LoginWindowController with the main class and the login stage.
+     *
+     * @param mainClass The reference to the main class.
+     * @param stage     The reference to the login stage.
+     */
     public void initialize(Main mainClass, Stage stage) {
         this.mainClass = mainClass;
         this.stage = stage;
     }
 
     /**
-     * Handle the login button.
+     * Handles the login button action.
+     * Attempts to authenticate the user based on the entered credentials.
+     * Displays an error message if the login fails.
      */
     @FXML
     public void handleLogin() {
@@ -77,9 +89,9 @@ public class LoginWindowController {
     }
 
     /**
-     * Fires an event when the user presses the Enter key
+     * Fires an event when the user presses the Enter key.
      *
-     * @param ae
+     * @param ae The action event.
      */
     @FXML
     public void onEnter(ActionEvent ae){

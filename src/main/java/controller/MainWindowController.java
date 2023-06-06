@@ -13,6 +13,9 @@ import model.Patient;
 
 import java.io.IOException;
 
+/**
+ * The controller class for the main window of the application.
+ */
 public class MainWindowController {
 
     @FXML
@@ -25,6 +28,12 @@ public class MainWindowController {
     private Button btnTreatment;
 
     private Login user;
+
+    /**
+     * Initializes the controller with the specified user.
+     *
+     * @param user The logged-in user.
+     */
     public void initialize(Login user) {
         this.user = user;
         if (this.user.getPermissions() > 1) {
@@ -32,6 +41,11 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Handles the action when the "Show All Patients" button is clicked.
+     *
+     * @param e The action event.
+     */
     @FXML
     private void handleShowAllPatient(ActionEvent e) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllPatientView.fxml"));
@@ -44,6 +58,11 @@ public class MainWindowController {
         controller.initialize(this.user);
     }
 
+    /**
+     * Handles the action when the "Show All Treatments" button is clicked.
+     *
+     * @param e The action event.
+     */
     @FXML
     private void handleShowAllTreatments(ActionEvent e) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllTreatmentView.fxml"));
@@ -56,6 +75,11 @@ public class MainWindowController {
         controller.initialize(this.user);
     }
 
+    /**
+     * Handles the action when the "Show All Caregivers" button is clicked.
+     *
+     * @param e The action event.
+     */
     @FXML
     private void handleShowAllCaregiver(ActionEvent e) {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/AllCaregiverView.fxml"));

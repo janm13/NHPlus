@@ -47,11 +47,9 @@ public class AllTreatmentController {
     @FXML
     private Button btnArchive;
 
-    private ObservableList<Treatment> tableviewContent =
-            FXCollections.observableArrayList();
+    private ObservableList<Treatment> tableviewContent = FXCollections.observableArrayList();
     private TreatmentDAO dao;
-    private ObservableList<String> myComboBoxData =
-            FXCollections.observableArrayList();
+    private ObservableList<String> myComboBoxData = FXCollections.observableArrayList();
     private ArrayList<Patient> patientList;
     private Login user;
 
@@ -127,7 +125,7 @@ public class AllTreatmentController {
             for (Patient patient: patientList) {
                 this.myComboBoxData.add(patient.getSurname());
             }
-        }catch(SQLException e){
+        } catch(SQLException e){
             e.printStackTrace();
         }
     }

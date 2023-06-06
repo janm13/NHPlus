@@ -18,6 +18,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The controller class for the new login window.
+ */
 public class NewLoginWindowController {
 
     @FXML
@@ -35,6 +38,12 @@ public class NewLoginWindowController {
             FXCollections.observableArrayList();
     private Stage stage;
 
+    /**
+     * Initializes the controller with the given CID and stage.
+     *
+     * @param cid   The CID value.
+     * @param stage The JavaFX stage.
+     */
     public void initialize(long cid, Stage stage) {
         this.stage = stage;
         this.txtCID.setText(Long.toString(cid));
@@ -47,9 +56,15 @@ public class NewLoginWindowController {
         this.cbxPermissionsData.add("Pfleger Rechte");
         this.cbxPermissionsData.add("Pfleger Read Only Rechte");
     }
+
+    /**
+     * Handles the action when the "Add Login" button is clicked.
+     */
     @FXML
     private void handleAddLogin() {
-        if (!checkFields()) { return; }
+        if (!checkFields()) {
+            return;
+        }
         long cid = Long.parseLong(this.txtCID.getText());
         String username = this.txtUsername.getText();
         String password = this.inpPassword.getText();
@@ -78,8 +93,15 @@ public class NewLoginWindowController {
         stage.close();
     }
 
+    /**
+     * Fires an event when the user presses the Enter key.
+     *
+     * @param ae The action event.
+     */
     @FXML
-    public void onEnter(ActionEvent ae){ this.btnLogin.fire(); }
+    public void onEnter(ActionEvent ae) {
+        this.btnLogin.fire();
+    }
 
     private boolean checkFields() {
         if (this.txtUsername.getText().equals("") || this.txtCID.getText().equals("") || this.inpPassword.getText().equals("") || this.cbxPermissions.getSelectionModel().getSelectedItem() == null) {
