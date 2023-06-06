@@ -97,7 +97,7 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditFirstname(TableColumn.CellEditEvent<Patient, String> event){
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 0)) { return; }
         event.getRowValue().setFirstName(event.getNewValue());
         doUpdate(event);
     }
@@ -108,7 +108,7 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditSurname(TableColumn.CellEditEvent<Patient, String> event){
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 0)) { return; }
         event.getRowValue().setSurname(event.getNewValue());
         doUpdate(event);
     }
@@ -119,7 +119,7 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditDateOfBirth(TableColumn.CellEditEvent<Patient, String> event){
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 0)) { return; }
         event.getRowValue().setDateOfBirth(event.getNewValue());
         doUpdate(event);
     }
@@ -130,7 +130,7 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditCareLevel(TableColumn.CellEditEvent<Patient, String> event){
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 0)) { return; }
         event.getRowValue().setCareLevel(event.getNewValue());
         doUpdate(event);
     }
@@ -141,7 +141,7 @@ public class AllPatientController {
      */
     @FXML
     public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event){
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 0)) { return; }
         event.getRowValue().setRoomnumber(event.getNewValue());
         doUpdate(event);
     }
@@ -199,7 +199,7 @@ public class AllPatientController {
      */
     @FXML
     public void handleDeleteRow() {
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 0)) { return; }
         this.dao = DAOFactory.getDAOFactory().createPatientDAO();
         int index = this.tableView.getSelectionModel().getSelectedIndex();
         Patient selectedItem = this.tableviewContent.remove(index);
@@ -232,7 +232,7 @@ public class AllPatientController {
      */
     @FXML
     public void handleAdd() {
-        if (!checkPermissions(this.user, 1) || !checkTextfields()) { return; }
+        if (!checkPermissions(this.user, 0) || !checkTextfields()) { return; }
         this.dao = DAOFactory.getDAOFactory().createPatientDAO();
         String surname = this.txtSurname.getText();
         String firstname = this.txtFirstname.getText();

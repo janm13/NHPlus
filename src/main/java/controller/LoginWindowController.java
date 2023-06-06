@@ -75,6 +75,6 @@ public class LoginWindowController {
 
     @FXML
     public void onEnter(ActionEvent ae){
-        btnLogin.fire();
+        this.btnLogin.fire();
     }
 }

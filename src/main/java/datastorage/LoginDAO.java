@@ -1,7 +1,6 @@
 package datastorage;
 
 import model.Login;
-import model.Patient;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ public class LoginDAO extends DAOimp<Login>{
 
     @Override
     protected String getCreateStatementString(Login login) {
-        return String.format("INSERT INTO login (cid, username, passwordhash, permissions) VALUES ('%d' '%s' '%s' '%d')",
+        return String.format("INSERT INTO login (cid, username, passwordhash, permissions) VALUES ('%d', '%s', '%s', '%d')",
                 login.getCid(), login.getUsername(), login.getPasswordHash(), login.getPermissions());
     }
 
@@ -60,6 +59,11 @@ public class LoginDAO extends DAOimp<Login>{
             return null;
         }
         return getInstanceFromResultSet(result);
+    }
+
+    public void deleteByCID(long cid) throws SQLException {
+        Statement st = conn.createStatement();
+        st.executeUpdate(String.format("DELETE FROM login WHERE cid = %d", cid));
     }
 
     public Login getReadByUsername(String username) throws SQLException {

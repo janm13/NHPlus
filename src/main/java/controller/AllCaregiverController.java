@@ -1,10 +1,13 @@
 package controller;
 
 import datastorage.DAOFactory;
+import datastorage.LoginDAO;
 import datastorage.TreatmentDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -12,12 +15,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import model.Caregiver;
 import datastorage.CaregiverDAO;
 import model.Login;
 import model.Treatment;
 import utils.DateConverter;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -77,21 +83,21 @@ public class AllCaregiverController {
 
     @FXML
     public void handleOnEditFirstName(TableColumn.CellEditEvent<Caregiver, String> event) {
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 0)) { return; }
         event.getRowValue().setFirstName(event.getNewValue());
         doUpdate(event);
     }
 
     @FXML
     public void handleOnEditSurname(TableColumn.CellEditEvent<Caregiver, String> event) {
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 0)) { return; }
         event.getRowValue().setSurname(event.getNewValue());
         doUpdate(event);
     }
 
     @FXML
     public void handleOnEditPhoneNumber(TableColumn.CellEditEvent<Caregiver, String> event) {
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 0)) { return; }
         event.getRowValue().setPhoneNumber(event.getNewValue());
         doUpdate(event);
     }
@@ -142,7 +148,7 @@ public class AllCaregiverController {
 
     @FXML
     public void handleAdd() {
-        if (!checkPermissions(this.user, 1) || !checkTextfields()) { return; }
+        if (!checkPermissions(this.user, 0) || !checkTextfields()) { return; }
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
         String surname = this.txfSurname.getText();
         String firstname = this.txfFirstname.getText();
@@ -155,11 +161,36 @@ public class AllCaregiverController {
         }
         readAllAndShowInTableView();
         clearTextfields();
+
+        List<Caregiver> caregiverList;
+        try {
+            caregiverList = this.dao.readAll();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("/NewLoginWindowView.fxml"));
+            AnchorPane pane = loader.load();
+            Scene scene = new Scene(pane);
+            //da die primaryStage noch im Hintergrund bleiben soll
+            Stage stage = new Stage();
+
+            NewLoginWindowController controller = loader.getController();
+            controller.initialize(caregiverList.get(caregiverList.size()-1).getCid(), stage);
+
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @FXML
     public void handleDelete() {
-        if (!checkPermissions(this.user, 1)) { return; }
+        if (!checkPermissions(this.user, 0)) { return; }
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
         TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
         List<Treatment> caregiverTreatments;
@@ -184,7 +215,9 @@ public class AllCaregiverController {
 
     private void delete(Caregiver caregiver) throws SQLException {
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
+        LoginDAO ldao = DAOFactory.getDAOFactory().createLoginDAO();
         this.dao.deleteById(caregiver.getCid());
+        ldao.deleteByCID(caregiver.getCid());
     }
 
     private boolean checkTextfields() {
