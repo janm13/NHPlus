@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.Login;
 import model.Patient;
 import model.Treatment;
 import datastorage.DAOFactory;
@@ -21,6 +22,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
+
+import static utils.PermissionChecker.checkPermissions;
 
 public class AllTreatmentController {
     @FXML
@@ -50,14 +53,19 @@ public class AllTreatmentController {
     private ObservableList<String> myComboBoxData =
             FXCollections.observableArrayList();
     private ArrayList<Patient> patientList;
-    private Main main;
+    private Login user;
 
-    public void initialize() {
+    /**
+     * initialize the tableview
+     *
+     * @param user
+     */
+    public void initialize(Login user) {
+        this.user = user;
         readAllAndDeleteOldEntries();
         readAllAndShowInTableView();
         comboBox.setItems(myComboBoxData);
         comboBox.getSelectionModel().select(0);
-        this.main = main;
 
         this.colID.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("tid"));
         this.colPid.setCellValueFactory(new PropertyValueFactory<Treatment, Integer>("pid"));
@@ -69,6 +77,9 @@ public class AllTreatmentController {
         createComboBoxData();
     }
 
+    /**
+     * read all and delete old entries
+     */
     public void readAllAndDeleteOldEntries() {
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         List<Treatment> allTreatments;
@@ -85,6 +96,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * read all and show in tableview
+     */
     public void readAllAndShowInTableView() {
         this.tableviewContent.clear();
         comboBox.getSelectionModel().select(0);
@@ -102,6 +116,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * create combobox data from patient list
+     */
     private void createComboBoxData(){
         PatientDAO dao = DAOFactory.getDAOFactory().createPatientDAO();
         try {
@@ -115,7 +132,9 @@ public class AllTreatmentController {
         }
     }
 
-
+    /**
+     *
+     */
     @FXML
     public void handleComboBox(){
         String p = this.comboBox.getSelectionModel().getSelectedItem();
@@ -145,6 +164,12 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * find patient in list
+     *
+     * @param surname
+     * @return
+     */
     private Patient searchInList(String surname){
         for (int i =0; i<this.patientList.size();i++){
             if(this.patientList.get(i).getSurname().equals(surname)){
@@ -154,8 +179,12 @@ public class AllTreatmentController {
         return null;
     }
 
+    /**
+     * set archive date for selected patient
+     */
     @FXML
     public void handleArchive(){
+        if (!checkPermissions(this.user, 1)) { return; }
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         int index = this.tableView.getSelectionModel().getSelectedIndex();
         if (this.tableviewContent.get(index).getArchiveDate() == null) {
@@ -168,14 +197,24 @@ public class AllTreatmentController {
             }
         }
     }
-    
+
+    /**
+     * delete given treatment
+     *
+     * @param treatment
+     * @throws SQLException
+     */
     public void delete(Treatment treatment) throws SQLException {
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         this.dao.deleteById(treatment.getTid());
     }
 
+    /**
+     * create new treatment window
+     */
     @FXML
     public void handleNewTreatment() {
+        if (!checkPermissions(this.user, 1)) { return; }
         try{
             String p = this.comboBox.getSelectionModel().getSelectedItem();
             Patient patient = searchInList(p);
@@ -190,6 +229,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * handle mouse click on tableview
+     */
     @FXML
     public void handleMouseClick(){
         tableView.setOnMouseClicked(event -> {
@@ -202,6 +244,11 @@ public class AllTreatmentController {
         });
     }
 
+    /**
+     * create new treatment window
+     *
+     * @param patient
+     */
     public void newTreatmentWindow(Patient patient){
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/NewTreatmentView.fxml"));
@@ -222,6 +269,11 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * create treatment window
+     *
+     * @param treatment
+     */
     public void treatmentWindow(Treatment treatment){
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/TreatmentView.fxml"));
@@ -231,7 +283,7 @@ public class AllTreatmentController {
             Stage stage = new Stage();
             TreatmentController controller = loader.getController();
 
-            controller.initializeController(this, stage, treatment);
+            controller.initializeController(this, stage, treatment, this.user);
 
             stage.setScene(scene);
             stage.setResizable(false);

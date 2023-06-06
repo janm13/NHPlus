@@ -9,13 +9,18 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import model.Caregiver;
+import model.Login;
 import model.Patient;
 import model.Treatment;
 import utils.DateConverter;
 import datastorage.DAOFactory;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
+import static utils.PermissionChecker.checkPermissions;
 
 
 /**
@@ -51,16 +56,16 @@ public class AllPatientController {
     TextField txtCarelevel;
     @FXML
     TextField txtRoom;
-    @FXML
-    private TextField txtAssets;
 
     private ObservableList<Patient> tableviewContent = FXCollections.observableArrayList();
     private PatientDAO dao;
+    private Login user;
 
     /**
      * Initializes the corresponding fields. Is called as soon as the corresponding FXML file is to be displayed.
      */
-    public void initialize() {
+    public void initialize(Login user) {
+        this.user = user;
         readAllAndDeleteOldEntries();
         readAllAndShowInTableView();
 
@@ -89,56 +94,77 @@ public class AllPatientController {
 
     /**
      * handles new firstname value
+     *
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditFirstname(TableColumn.CellEditEvent<Patient, String> event){
+    public void handleOnEditFirstname(TableColumn.CellEditEvent<Patient, String> event) {
+        if (!checkPermissions(this.user, 0)) {
+            return;
+        }
         event.getRowValue().setFirstName(event.getNewValue());
         doUpdate(event);
     }
 
     /**
      * handles new surname value
+     *
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditSurname(TableColumn.CellEditEvent<Patient, String> event){
+    public void handleOnEditSurname(TableColumn.CellEditEvent<Patient, String> event) {
+        if (!checkPermissions(this.user, 0)) {
+            return;
+        }
         event.getRowValue().setSurname(event.getNewValue());
         doUpdate(event);
     }
 
     /**
      * handles new birthdate value
+     *
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditDateOfBirth(TableColumn.CellEditEvent<Patient, String> event){
+    public void handleOnEditDateOfBirth(TableColumn.CellEditEvent<Patient, String> event) {
+        if (!checkPermissions(this.user, 0)) {
+            return;
+        }
         event.getRowValue().setDateOfBirth(event.getNewValue());
         doUpdate(event);
     }
 
     /**
      * handles new carelevel value
+     *
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditCareLevel(TableColumn.CellEditEvent<Patient, String> event){
+    public void handleOnEditCareLevel(TableColumn.CellEditEvent<Patient, String> event) {
+        if (!checkPermissions(this.user, 0)) {
+            return;
+        }
         event.getRowValue().setCareLevel(event.getNewValue());
         doUpdate(event);
     }
 
     /**
      * handles new roomnumber value
+     *
      * @param event event including the value that a user entered into the cell
      */
     @FXML
-    public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event){
+    public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event) {
+        if (!checkPermissions(this.user, 0)) {
+            return;
+        }
         event.getRowValue().setRoomnumber(event.getNewValue());
         doUpdate(event);
     }
 
     /**
      * updates a patient by calling the update-Method in the {@link PatientDAO}
+     *
      * @param t row to be updated by the user (includes the patient)
      */
     private void doUpdate(TableColumn.CellEditEvent<Patient, String> t) {
@@ -186,10 +212,13 @@ public class AllPatientController {
     }
 
     /**
-     * handles a delete-click-event. Calls the delete methods in the {@link PatientDAO} and {@link TreatmentDAO}
+     * handles a delete-click-event and archives the selected Patient and corresponding Treatments
      */
     @FXML
     public void handleDeleteRow() {
+        if (!checkPermissions(this.user, 0)) {
+            return;
+        }
         this.dao = DAOFactory.getDAOFactory().createPatientDAO();
         int index = this.tableView.getSelectionModel().getSelectedIndex();
         Patient selectedItem = this.tableviewContent.remove(index);
@@ -210,6 +239,9 @@ public class AllPatientController {
         }
     }
 
+    /**
+     * handles a delete-click-event. Calls the delete methods in the {@link PatientDAO} and {@link TreatmentDAO}
+     */
     private void delete(Patient patient) throws SQLException {
         this.dao = DAOFactory.getDAOFactory().createPatientDAO();
         TreatmentDAO tDao = DAOFactory.getDAOFactory().createTreatmentDAO();
@@ -222,6 +254,9 @@ public class AllPatientController {
      */
     @FXML
     public void handleAdd() {
+        if (!checkPermissions(this.user, 0) || !checkTextfields()) {
+            return;
+        }
         this.dao = DAOFactory.getDAOFactory().createPatientDAO();
         String surname = this.txtSurname.getText();
         String firstname = this.txtFirstname.getText();
@@ -237,6 +272,32 @@ public class AllPatientController {
         }
         readAllAndShowInTableView();
         clearTextfields();
+    }
+
+    /**
+     * checks if all textfields are filled
+     *
+     * @return true if all textfields are filled
+     */
+    private boolean checkTextfields() {
+        ArrayList<TextField> textFields = new ArrayList<>();
+        textFields.add(txtSurname);
+        textFields.add(txtFirstname);
+        textFields.add(txtBirthday);
+        textFields.add(txtRoom);
+        textFields.add(txtCarelevel);
+
+        for (TextField t : textFields) {
+            if (t.getText().equals("")) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Information");
+                alert.setHeaderText("Pflichtfelder nicht befüllt!");
+                alert.setContentText("Bitte befüllen Sie alle Felder!");
+                alert.showAndWait();
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
