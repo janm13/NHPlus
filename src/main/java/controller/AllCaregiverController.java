@@ -138,8 +138,6 @@ public class AllCaregiverController {
 
     /**
      * handle deleting of all old caregivers
-     *
-     * @param t
      */
     public void readAllAndDeleteOldEntries() {
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
