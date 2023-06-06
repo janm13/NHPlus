@@ -59,6 +59,11 @@ public class AllCaregiverController {
     private CaregiverDAO dao;
     private Login user;
 
+    /**
+     * initialize the tableview and delete all old entries
+     *
+     * @param user
+     */
     public void initialize(Login user) {
         this.user = user;
         readAllAndDeleteOldEntries();
@@ -81,6 +86,11 @@ public class AllCaregiverController {
         this.tableView.setItems(this.tableviewContent);
     }
 
+    /**
+     * handle editing of first name
+     *
+     * @param event
+     */
     @FXML
     public void handleOnEditFirstName(TableColumn.CellEditEvent<Caregiver, String> event) {
         if (!checkPermissions(this.user, 0)) { return; }
@@ -88,6 +98,11 @@ public class AllCaregiverController {
         doUpdate(event);
     }
 
+    /**
+     * handle editing of surname
+     *
+     * @param event
+     */
     @FXML
     public void handleOnEditSurname(TableColumn.CellEditEvent<Caregiver, String> event) {
         if (!checkPermissions(this.user, 0)) { return; }
@@ -95,6 +110,11 @@ public class AllCaregiverController {
         doUpdate(event);
     }
 
+    /**
+     * handle editing of phone number
+     *
+     * @param event
+     */
     @FXML
     public void handleOnEditPhoneNumber(TableColumn.CellEditEvent<Caregiver, String> event) {
         if (!checkPermissions(this.user, 0)) { return; }
@@ -102,6 +122,11 @@ public class AllCaregiverController {
         doUpdate(event);
     }
 
+    /**
+     * handle update of a caregiver
+     *
+     * @param t
+     */
     private void doUpdate(TableColumn.CellEditEvent<Caregiver, String> t) {
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
         try {
@@ -111,6 +136,11 @@ public class AllCaregiverController {
         }
     }
 
+    /**
+     * handle deleting of all old caregivers
+     *
+     * @param t
+     */
     public void readAllAndDeleteOldEntries() {
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
         List<Caregiver> allCaregivers;
@@ -146,6 +176,9 @@ public class AllCaregiverController {
         }
     }
 
+    /**
+     * handle adding of a new caregiver
+     */
     @FXML
     public void handleAdd() {
         if (!checkPermissions(this.user, 0) || !checkTextfields()) { return; }
@@ -188,6 +221,9 @@ public class AllCaregiverController {
         }
     }
 
+    /**
+     * handle archiving or deleting of a caregiver
+     */
     @FXML
     public void handleDelete() {
         if (!checkPermissions(this.user, 0)) { return; }
@@ -213,6 +249,11 @@ public class AllCaregiverController {
         }
     }
 
+    /**
+     * handle deleting of a caregiver
+     *
+     * @param caregiver
+     */
     private void delete(Caregiver caregiver) throws SQLException {
         this.dao = DAOFactory.getDAOFactory().createCaregiverDAO();
         LoginDAO ldao = DAOFactory.getDAOFactory().createLoginDAO();
@@ -220,6 +261,11 @@ public class AllCaregiverController {
         ldao.deleteByCID(caregiver.getCid());
     }
 
+    /**
+     * check if all textfields are filled
+     *
+     * @return
+     */
     private boolean checkTextfields() {
         ArrayList<TextField> textFields = new ArrayList<>();
         textFields.add(txfSurname);
@@ -239,6 +285,9 @@ public class AllCaregiverController {
         return true;
     }
 
+    /**
+     * clear all textfields
+     */
     private void clearTextfields() {
         this.txfFirstname.clear();
         this.txfSurname.clear();

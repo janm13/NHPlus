@@ -55,6 +55,11 @@ public class AllTreatmentController {
     private ArrayList<Patient> patientList;
     private Login user;
 
+    /**
+     * initialize the tableview
+     *
+     * @param user
+     */
     public void initialize(Login user) {
         this.user = user;
         readAllAndDeleteOldEntries();
@@ -72,6 +77,9 @@ public class AllTreatmentController {
         createComboBoxData();
     }
 
+    /**
+     * read all and delete old entries
+     */
     public void readAllAndDeleteOldEntries() {
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         List<Treatment> allTreatments;
@@ -88,6 +96,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * read all and show in tableview
+     */
     public void readAllAndShowInTableView() {
         this.tableviewContent.clear();
         comboBox.getSelectionModel().select(0);
@@ -105,6 +116,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * create combobox data from patient list
+     */
     private void createComboBoxData(){
         PatientDAO dao = DAOFactory.getDAOFactory().createPatientDAO();
         try {
@@ -118,7 +132,9 @@ public class AllTreatmentController {
         }
     }
 
-
+    /**
+     *
+     */
     @FXML
     public void handleComboBox(){
         String p = this.comboBox.getSelectionModel().getSelectedItem();
@@ -148,6 +164,12 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * find patient in list
+     *
+     * @param surname
+     * @return
+     */
     private Patient searchInList(String surname){
         for (int i =0; i<this.patientList.size();i++){
             if(this.patientList.get(i).getSurname().equals(surname)){
@@ -157,6 +179,9 @@ public class AllTreatmentController {
         return null;
     }
 
+    /**
+     * set archive date for selected patient
+     */
     @FXML
     public void handleArchive(){
         if (!checkPermissions(this.user, 1)) { return; }
@@ -172,12 +197,21 @@ public class AllTreatmentController {
             }
         }
     }
-    
+
+    /**
+     * delete given treatment
+     *
+     * @param treatment
+     * @throws SQLException
+     */
     public void delete(Treatment treatment) throws SQLException {
         this.dao = DAOFactory.getDAOFactory().createTreatmentDAO();
         this.dao.deleteById(treatment.getTid());
     }
 
+    /**
+     * create new treatment window
+     */
     @FXML
     public void handleNewTreatment() {
         if (!checkPermissions(this.user, 1)) { return; }
@@ -195,6 +229,9 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * handle mouse click on tableview
+     */
     @FXML
     public void handleMouseClick(){
         tableView.setOnMouseClicked(event -> {
@@ -207,6 +244,11 @@ public class AllTreatmentController {
         });
     }
 
+    /**
+     * create new treatment window
+     *
+     * @param patient
+     */
     public void newTreatmentWindow(Patient patient){
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/NewTreatmentView.fxml"));
@@ -227,6 +269,11 @@ public class AllTreatmentController {
         }
     }
 
+    /**
+     * create treatment window
+     *
+     * @param treatment
+     */
     public void treatmentWindow(Treatment treatment){
         try {
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("/TreatmentView.fxml"));

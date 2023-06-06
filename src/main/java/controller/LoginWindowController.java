@@ -39,6 +39,9 @@ public class LoginWindowController {
         this.stage = stage;
     }
 
+    /**
+     * Handle the login button.
+     */
     @FXML
     public void handleLogin() {
         LoginDAO dao = DAOFactory.getDAOFactory().createLoginDAO();
@@ -73,6 +76,11 @@ public class LoginWindowController {
         alert.showAndWait();
     }
 
+    /**
+     * Fires an event when the user presses the Enter key
+     *
+     * @param ae
+     */
     @FXML
     public void onEnter(ActionEvent ae){
         this.btnLogin.fire();
