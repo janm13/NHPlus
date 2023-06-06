@@ -31,8 +31,10 @@ import java.util.List;
 
 import static utils.PermissionChecker.checkPermissions;
 
-public class AllCaregiverController {@FXML
-private TableView<Caregiver> tableView;
+public class AllCaregiverController {
+
+    @FXML
+    private TableView<Caregiver> tableView;
     @FXML
     private TableColumn<Caregiver, Integer> colID;
     @FXML

@@ -131,7 +131,7 @@ public class AllTreatmentController {
     }
 
     /**
-     *
+     * update tableview content according to combobox selection
      */
     @FXML
     public void handleComboBox(){
