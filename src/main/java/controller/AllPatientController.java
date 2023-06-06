@@ -63,6 +63,8 @@ public class AllPatientController {
 
     /**
      * Initializes the corresponding fields. Is called as soon as the corresponding FXML file is to be displayed.
+     *
+     * @param user The currently logged-in user.
      */
     public void initialize(Login user) {
         this.user = user;
@@ -71,9 +73,9 @@ public class AllPatientController {
 
         this.colID.setCellValueFactory(new PropertyValueFactory<Patient, Integer>("pid"));
 
-        //CellValuefactory zum Anzeigen der Daten in der TableView
+        // CellValuefactory zum Anzeigen der Daten in der TableView
         this.colFirstName.setCellValueFactory(new PropertyValueFactory<Patient, String>("firstName"));
-        //CellFactory zum Schreiben innerhalb der Tabelle
+        // CellFactory zum Schreiben innerhalb der Tabelle
         this.colFirstName.setCellFactory(TextFieldTableCell.forTableColumn());
 
         this.colSurname.setCellValueFactory(new PropertyValueFactory<Patient, String>("surname"));
@@ -88,14 +90,14 @@ public class AllPatientController {
         this.colRoom.setCellValueFactory(new PropertyValueFactory<Patient, String>("roomnumber"));
         this.colRoom.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        //Anzeigen der Daten
+        // Anzeigen der Daten
         this.tableView.setItems(this.tableviewContent);
     }
 
     /**
-     * handles new firstname value
+     * Handles new firstname value.
      *
-     * @param event event including the value that a user entered into the cell
+     * @param event Event including the value that a user entered into the cell.
      */
     @FXML
     public void handleOnEditFirstname(TableColumn.CellEditEvent<Patient, String> event) {
@@ -107,9 +109,9 @@ public class AllPatientController {
     }
 
     /**
-     * handles new surname value
+     * Handles new surname value.
      *
-     * @param event event including the value that a user entered into the cell
+     * @param event Event including the value that a user entered into the cell.
      */
     @FXML
     public void handleOnEditSurname(TableColumn.CellEditEvent<Patient, String> event) {
@@ -121,9 +123,9 @@ public class AllPatientController {
     }
 
     /**
-     * handles new birthdate value
+     * Handles new birthdate value.
      *
-     * @param event event including the value that a user entered into the cell
+     * @param event Event including the value that a user entered into the cell.
      */
     @FXML
     public void handleOnEditDateOfBirth(TableColumn.CellEditEvent<Patient, String> event) {
@@ -135,9 +137,9 @@ public class AllPatientController {
     }
 
     /**
-     * handles new carelevel value
+     * Handles new carelevel value.
      *
-     * @param event event including the value that a user entered into the cell
+     * @param event Event including the value that a user entered into the cell.
      */
     @FXML
     public void handleOnEditCareLevel(TableColumn.CellEditEvent<Patient, String> event) {
@@ -149,9 +151,9 @@ public class AllPatientController {
     }
 
     /**
-     * handles new roomnumber value
+     * Handles new roomnumber value.
      *
-     * @param event event including the value that a user entered into the cell
+     * @param event Event including the value that a user entered into the cell.
      */
     @FXML
     public void handleOnEditRoomnumber(TableColumn.CellEditEvent<Patient, String> event) {
@@ -163,9 +165,9 @@ public class AllPatientController {
     }
 
     /**
-     * updates a patient by calling the update-Method in the {@link PatientDAO}
+     * Updates a patient by calling the update-Method in the {@link PatientDAO}.
      *
-     * @param t row to be updated by the user (includes the patient)
+     * @param t Row to be updated by the user (includes the patient).
      */
     private void doUpdate(TableColumn.CellEditEvent<Patient, String> t) {
         this.dao = DAOFactory.getDAOFactory().createPatientDAO();
@@ -176,6 +178,9 @@ public class AllPatientController {
         }
     }
 
+    /**
+     * Reads all patients and deletes old entries.
+     */
     public void readAllAndDeleteOldEntries() {
         this.dao = DAOFactory.getDAOFactory().createPatientDAO();
         List<Patient> allPatients;
@@ -193,7 +198,7 @@ public class AllPatientController {
     }
 
     /**
-     * calls readAll in {@link PatientDAO} and shows patients in the table
+     * Calls readAll in {@link PatientDAO} and shows patients in the table.
      */
     private void readAllAndShowInTableView() {
         this.tableviewContent.clear();
@@ -212,7 +217,7 @@ public class AllPatientController {
     }
 
     /**
-     * handles a delete-click-event and archives the selected Patient and corresponding Treatments
+     * Handles a delete-click-event and archives the selected Patient and corresponding Treatments.
      */
     @FXML
     public void handleDeleteRow() {
@@ -240,7 +245,10 @@ public class AllPatientController {
     }
 
     /**
-     * handles a delete-click-event. Calls the delete methods in the {@link PatientDAO} and {@link TreatmentDAO}
+     * Handles a delete-click-event. Calls the delete methods in the {@link PatientDAO} and {@link TreatmentDAO}.
+     *
+     * @param patient The patient to be deleted.
+     * @throws SQLException If an SQL exception occurs.
      */
     private void delete(Patient patient) throws SQLException {
         this.dao = DAOFactory.getDAOFactory().createPatientDAO();
@@ -250,7 +258,7 @@ public class AllPatientController {
     }
 
     /**
-     * handles a add-click-event. Creates a patient and calls the create method in the {@link PatientDAO}
+     * Handles an add-click-event. Creates a patient and calls the create method in the {@link PatientDAO}.
      */
     @FXML
     public void handleAdd() {
@@ -275,9 +283,9 @@ public class AllPatientController {
     }
 
     /**
-     * checks if all textfields are filled
+     * Checks if all textfields are filled.
      *
-     * @return true if all textfields are filled
+     * @return True if all textfields are filled.
      */
     private boolean checkTextfields() {
         ArrayList<TextField> textFields = new ArrayList<>();
@@ -301,7 +309,7 @@ public class AllPatientController {
     }
 
     /**
-     * removes content from all textfields
+     * Removes content from all textfields.
      */
     private void clearTextfields() {
         this.txtFirstname.clear();

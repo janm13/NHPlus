@@ -5,7 +5,7 @@ Du bist Mitarbeiter der HiTec GmbH, die seit über 15 Jahren IT-Dienstleister un
 
 Entwicklung: Erstellung eigener Softwareprodukte
 
-Consulting: Anwenderberatung und Schulungen zu neuen IT- und Kommunikationstechnologien , Applikationen und IT-Sicherheit
+Consulting: Anwenderberatung und Schulungen zu neuen IT- und Kommunikationstechnologien, Applikationen und IT-Sicherheit
 
 IT-Systembereich: Lieferung und Verkauf einzelner IT-Komponenten bis zur Planung und Installation komplexer Netzwerke und Dienste
 
@@ -39,7 +39,7 @@ Da in der Entwicklungsabteilung der HiTech GmbH agile Vorgehensweisen vorgeschri
 
 ## Stand des Projektes
 
-In den bisherigen Sprints wurden die Module zur Erfassung der Patienten- und Behandlungsdaten fertiggestellt. Es fehlt das Modul zur Erfassung der Pflegekräfte. Deswegen kann bisher ebenfalls nicht erfasst werden, welche Pflegekraft eine bestimmte Behandlung durchgeführt hat. In der letzten Sprint Review sind von der Curanum Schwachhausen Zweifel angebracht worden, dass die bisher entwickelte Software den Anforderungen des Datenschutzes genügt.
+In den bisherigen Sprints wurden die Module zur Erfassung der Patienten- und Behandlungsdaten fertiggestellt. Es fehlt das Modul zur Erfassung der Pflegekräfte. Deswegen kann bisher ebenfalls nicht erfasst werden, welche Pflegekraft eine bestimmte Behandlung durchgeführt hat. In der letzten Sprint-Review sind von der Curanum Schwachhausen Zweifel angebracht worden, dass die bisher entwickelte Software den Anforderungen des Datenschutzes genügt.
 
 ## Technische Hinweise
 
@@ -49,18 +49,18 @@ Wird das Open JDK verwendet, werden JavaFX-Abhängigkeiten nicht importiert. Die
 
 - Benutzername: SA
 - Passwort: SA
-- Bitte nicht in die Datenbank schauen, während die Applikation läuft. Das sorgt leider für einen Lock, der erst wieder verschwindet, wenn IntelliJ neugestartet wird!
+- Bitte nicht in die Datenbank schauen, während die Applikation läuft. Das sorgt leider für einen Lock, der erst wieder verschwindet, wenn IntelliJ neu gestartet wird!
 
 ## Benutzername und Passwort für das Login
 
-Admin (Alle Berechtigungen):
+Admin (**Alle Berechtigungen**):
 - Benutzername: Admin
 - Passwort: admin
 
-Max Muster (Kann Patienten einsehen & Behandlungen verwalten):
+Max Muster (**Kann Patienten einsehen & Behandlungen verwalten**):
 - Benutzername: MaxM
 - Passwort: must3r-M4X
 
-Herbert Hofmann (Kann Patienten & Behandlungen einsehen):
+Herbert Hofmann (**Kann Patienten & Behandlungen einsehen**):
 - Benutzername: HerbertH
 - Passwort: h0fm4nn-H3RB3RT

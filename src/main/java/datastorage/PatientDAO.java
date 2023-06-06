@@ -14,17 +14,19 @@ import java.util.ArrayList;
 public class PatientDAO extends DAOimp<Patient> {
 
     /**
-     * constructs Onbject. Calls the Constructor from <code>DAOImp</code> to store the connection.
-     * @param conn
+     * Constructs a PatientDAO object with the given database connection.
+     *
+     * @param conn The database connection to be used by the DAO.
      */
     public PatientDAO(Connection conn) {
         super(conn);
     }
 
     /**
-     * generates a <code>INSERT INTO</code>-Statement for a given patient
-     * @param patient for which a specific INSERT INTO is to be created
-     * @return <code>String</code> with the generated SQL.
+     * Generates an SQL INSERT statement for a given patient.
+     *
+     * @param patient The patient for which a specific INSERT statement is to be created.
+     * @return The SQL INSERT statement for the patient.
      */
     @Override
     protected String getCreateStatementString(Patient patient) {
@@ -33,9 +35,10 @@ public class PatientDAO extends DAOimp<Patient> {
     }
 
     /**
-     * generates a <code>select</code>-Statement for a given key
-     * @param key for which a specific SELECTis to be created
-     * @return <code>String</code> with the generated SQL.
+     * Generates an SQL SELECT statement for retrieving a patient by its ID.
+     *
+     * @param key The ID of the patient for which a specific SELECT statement is to be created.
+     * @return The SQL SELECT statement for retrieving the patient by its ID.
      */
     @Override
     protected String getReadByIDStatementString(long key) {
@@ -43,9 +46,11 @@ public class PatientDAO extends DAOimp<Patient> {
     }
 
     /**
-     * maps a <code>ResultSet</code> to a <code>Patient</code>
-     * @param result ResultSet with a single row. Columns will be mapped to a patient-object.
-     * @return patient with the data from the resultSet.
+     * Maps a ResultSet to a Patient object.
+     *
+     * @param result The ResultSet with a single row. The columns will be mapped to a Patient object.
+     * @return A Patient object with the data from the ResultSet.
+     * @throws SQLException if an SQL error occurs during the mapping.
      */
     @Override
     protected Patient getInstanceFromResultSet(ResultSet result) throws SQLException {
@@ -59,8 +64,9 @@ public class PatientDAO extends DAOimp<Patient> {
     }
 
     /**
-     * generates a <code>SELECT</code>-Statement for all patients.
-     * @return <code>String</code> with the generated SQL.
+     * Generates an SQL SELECT statement for retrieving all patients.
+     *
+     * @return The SQL SELECT statement for retrieving all patients.
      */
     @Override
     protected String getReadAllStatementString() {
@@ -68,9 +74,11 @@ public class PatientDAO extends DAOimp<Patient> {
     }
 
     /**
-     * maps a <code>ResultSet</code> to a <code>Patient-List</code>
-     * @param result ResultSet with a multiple rows. Data will be mapped to patient-object.
-     * @return ArrayList with patients from the resultSet.
+     * Maps a ResultSet to an ArrayList of Patient objects.
+     *
+     * @param result The ResultSet with multiple rows. The data will be mapped to Patient objects.
+     * @return An ArrayList of Patient objects from the ResultSet.
+     * @throws SQLException if an SQL error occurs during the mapping.
      */
     @Override
     protected ArrayList<Patient> getListFromResultSet(ResultSet result) throws SQLException {
@@ -88,24 +96,26 @@ public class PatientDAO extends DAOimp<Patient> {
     }
 
     /**
-     * generates a <code>UPDATE</code>-Statement for a given patient
-     * @param patient for which a specific update is to be created
-     * @return <code>String</code> with the generated SQL.
+     * Generates an SQL UPDATE statement for a given patient.
+     *
+     * @param patient The patient for which a specific UPDATE statement is to be created.
+     * @return The SQL UPDATE statement for the patient.
      */
     @Override
     protected String getUpdateStatementString(Patient patient) {
         return String.format("UPDATE patient SET firstname = '%s', surname = '%s', dateOfBirth = '%s', carelevel = '%s', " +
-                "roomnumber = '%s', archive_date = '%s' WHERE pid = '%d'", patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(),
+                        "roomnumber = '%s', archive_date = '%s' WHERE pid = '%d'", patient.getFirstName(), patient.getSurname(), patient.getDateOfBirth(),
                 patient.getCareLevel(), patient.getRoomnumber(), patient.getArchiveDate(), patient.getPid());
     }
 
     /**
-     * generates a <code>delete</code>-Statement for a given key
-     * @param key for which a specific DELETE is to be created
-     * @return <code>String</code> with the generated SQL.
+     * Generates an SQL DELETE statement for a given key.
+     *
+     * @param key The key for which a specific DELETE statement is to be created.
+     * @return The SQL DELETE statement for the key.
      */
     @Override
     protected String getDeleteStatementString(long key) {
-        return String.format("Delete FROM patient WHERE pid=%d", key);
+        return String.format("DELETE FROM patient WHERE pid=%d", key);
     }
 }
